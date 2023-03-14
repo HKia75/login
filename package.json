@@ -1,0 +1,54 @@
+{
+  "name": "react-college-project",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "bootstrap": "^5.1.0",
+    "chart.js": "^3.5.1",
+    "history": "4.7.2",
+    "mapir-react-component": "^1.8.1",
+    "node-sass": "^8.0.0",
+    "react": "^17.0.2",
+    "react-chartjs-2": "^3.0.4",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.15.0",
+    "react-router-dom": "^5.2.1",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts  --openssl-legacy-provider start ",
+    "build": "react-scripts build",
+    "test": "react-scripts test  --transformIgnorePatterns \"node_modules/(?!mapir-react-component)/\"",
+    "eject": "react-scripts eject",
+    "server": "json-server-auth --watch server/db.json --port 8000"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@querair/jest-expect-message": "^1.0.3",
+    "json-server": "^0.16.3",
+    "json-server-auth": "^2.1.0",
+    "prop-types": "^15.7.2"
+  }
+}
