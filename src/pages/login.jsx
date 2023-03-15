@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useAuth } from "contexts/Auth";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -10,73 +9,76 @@ export const ERROR_MESSAGES = {
 };
 
 const LoginPage = () => {
-  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { toggleAuth, user } = useAuth()
-  const history = useHistory()
+  const [error, setError] = useState("");
+
+  const onEmailInputChange = (event) => setEmail(event.target.value);
+  const onPasswordInputChange = (event) => setPassword(event.target.value);
+  const { toggleAuth, user } = useAuth();
+  const history = useHistory();
 
   useEffect(() => {
     if (user.loggedIn) {
-      history.push('/dashboard')
+      history.push("/dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  }, [user]);
 
+  const handleLogin = (event) => {
+    event.preventDefault();
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await axios
-      .post("http://localhost:8000/login", {
-        email: email,
-        password: password,
+    loginAPI({
+      email,
+      password,
+    })
+      .then(() => {
+        toggleAuth();
+        history.push("/dashboard");
       })
-      .then((response) => {
-        toggleAuth()
-        history.push('/dashboard')
-      })
-      .catch((err) => setError(() => err.response.data))
+      .catch((err) => setError(() => err.response.data));
   };
 
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-4">
-          {error &&  (
+          {error && (
             <div className="alert alert-danger" role="alert">
-               {ERROR_MESSAGES[error] ?? error}
+              {ERROR_MESSAGES[error] ?? error}
             </div>
-          ) }
-
+          )}
           <div className="card">
-            <form className="card-body" onSubmit={onSubmit}>
-              <label className="mb-3" htmlFor="email">
-                ایمیل
-              </label>
-              <br />
-              <input
-                className="form-control"
-                type="email"
-                value={email}
-                id="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <br />
-              <label className="mb-2" htmlFor="password">
-                گذرواژه
-              </label>
-              <br />
-              <input
-                className="form-control"
-                type="password"
-                value={password}
-                id="password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <br />
+            <form className="card-body" onSubmit={handleLogin}>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  ایمیل
+                </label>
+                <input
+                  onChange={onEmailInputChange}
+                  value={email}
+                  type="email"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                />
+                {/*<div id="emailHelp" className="form-text text-danger">ایمیل معتبر نمی‌باشد!</div>*/}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  گذرواژه
+                </label>
+                <input
+                  value={password}
+                  onChange={onPasswordInputChange}
+                  type="password"
+                  className="form-control"
+                  id="exampleInputPassword1"
+                />
+              </div>
               <button
                 type="submit"
-                className="btn btn-primary mt-3"
+                className="btn btn-primary"
                 disabled={!email || !password}
               >
                 ورود
