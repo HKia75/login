@@ -13,7 +13,15 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setAuth } = useAuth()
+  const { toggleAuth, user } = useAuth()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (user.loggedIn) {
+      history.push('/dashboard')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
 
   const onSubmit = async (e) => {
@@ -24,28 +32,21 @@ const LoginPage = () => {
         password: password,
       })
       .then((response) => {
-        setAuth(response)
+        toggleAuth()
+        history.push('/dashboard')
       })
-      .catch((error) => {
-        if (error.response.data == "Incorrect password") {
-          setError("گذرواژه اشتباه می‌باشد!");
-        } else if (error.response.data == "Cannot find user") {
-          setError("کاربری با این ایمیل یافت نشد!");
-        }
-      });
+      .catch((err) => setError(() => err.response.data))
   };
 
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-4">
-          {error ? (
+          {error &&  (
             <div className="alert alert-danger" role="alert">
-              {error}
+               {ERROR_MESSAGES[error] ?? error}
             </div>
-          ) : (
-            ""
-          )}
+          ) }
 
           <div className="card">
             <form className="card-body" onSubmit={onSubmit}>
@@ -54,7 +55,7 @@ const LoginPage = () => {
               </label>
               <br />
               <input
-                className="w-100 mb-3"
+                className="form-control"
                 type="email"
                 value={email}
                 id="email"
@@ -66,7 +67,7 @@ const LoginPage = () => {
               </label>
               <br />
               <input
-                className="w-100"
+                className="form-control"
                 type="password"
                 value={password}
                 id="password"
@@ -76,7 +77,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 className="btn btn-primary mt-3"
-                disabled={!email && !password}
+                disabled={!email || !password}
               >
                 ورود
               </button>
